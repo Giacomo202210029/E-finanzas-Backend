@@ -1,0 +1,19 @@
+{
+  "name": "e-finanzas-backend",
+  "version": "1.0.0",
+  "description": "Backend para E-Finanzas",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Tu nombre",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "mysql2": "^3.11.3"
+  }
+}
