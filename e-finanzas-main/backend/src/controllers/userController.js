@@ -7,23 +7,26 @@ exports.register = (req, res) => {
     const { nombre, correo_electronico, contrasena } = req.body;
 
     try {
-        // Encriptar la contraseña antes de guardarla
         const hashedPassword = bcrypt.hashSync(contrasena, 10);
-
         const query = 'INSERT INTO Usuarios (nombre, correo_electronico, contrasena, fecha_creacion) VALUES (?, ?, ?, NOW())';
 
         connection.query(query, [nombre, correo_electronico, hashedPassword], (err, results) => {
             if (err) {
-                console.error('Database error:', err); // Log the specific database error
+                console.error('Database error:', err);
                 return res.status(500).json({ error: 'Error al registrar el usuario' });
             }
-            res.status(201).json({ message: 'Usuario registrado exitosamente' });
+
+            // Devolver el usuario registrado como respuesta
+            const newUser = { usuario_id: results.insertId, nombre, correo_electronico };
+            res.status(201).json({ message: 'Usuario registrado exitosamente', usuario: newUser });
         });
     } catch (error) {
-        console.error('Hashing error:', error); // Log if hashing throws an error
+        console.error('Hashing error:', error);
         return res.status(500).json({ error: 'Error interno en el servidor' });
     }
 };
+
+
 
 
 
