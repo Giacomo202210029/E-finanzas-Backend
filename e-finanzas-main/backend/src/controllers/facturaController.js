@@ -191,4 +191,24 @@ exports.addFactura = (req, res) => {
 };
 
 
+// Eliminar una factura por ID
+exports.deleteFactura = (req, res) => {
+    const facturaId = req.params.id;  // Obtener el ID de la factura desde los parámetros de la URL
+
+    const query = 'DELETE FROM Facturas WHERE factura_id = ?';
+    connection.query(query, [facturaId], (err, results) => {
+        if (err) {
+            console.error('Error al eliminar la factura:', err);
+            return res.status(500).json({ error: 'Error al eliminar la factura' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: 'Factura no encontrada' });
+        }
+
+        res.status(200).json({ message: 'Factura eliminada exitosamente' });
+    });
+};
+
+
 

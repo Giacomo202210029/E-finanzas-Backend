@@ -6,5 +6,6 @@ const facturaController = require('../controllers/facturaController');
 router.get('/user', facturaController.getFacturasByUser);  // Obtener facturas del usuario
 router.post('/', facturaController.addFactura);  // Añadir nueva factura // Añadir nueva factura
 router.get('/calculate-tcea-total', facturaController.calculateTCEATotal);
+router.delete('/:id', facturaController.deleteFactura); // Nueva ruta de eliminación
 
 module.exports = router;
