@@ -1,11 +1,10 @@
 
 const connection = require('../models/database');
 
-// Obtener todas las facturas de un usuario (simple, sin autenticación)
-// Obtener todas las facturas de un usuario
+
 exports.getFacturasByUser = (req, res) => {
-    const userId = req.query.usuario_id;  // Retrieve `usuario_id` from query parameters
-    console.log('Fetching invoices for user:', userId); // Log for debugging
+    const userId = req.query.usuario_id;
+    console.log('Fetching invoices for user:', userId);
 
     const query = 'SELECT * FROM Facturas WHERE usuario_id = ?';
 
@@ -18,10 +17,9 @@ exports.getFacturasByUser = (req, res) => {
 };
 
 exports.calculateTCEATotal = (req, res) => {
-    const userId = req.query.usuario_id;  // Se obtiene el usuario_id desde los parámetros de consulta
+    const userId = req.query.usuario_id;
     console.log('Calculando TCEA total para el usuario:', userId);
 
-    // Primero, obtenemos todas las facturas del usuario
     const query = 'SELECT valor_a_entregar, valor_recibido, tcea FROM Facturas WHERE usuario_id = ?';
     connection.query(query, [userId], (err, results) => {
         if (err) {
@@ -32,7 +30,7 @@ exports.calculateTCEATotal = (req, res) => {
             return res.status(404).json({ error: 'No se encontraron facturas para este usuario' });
         }
 
-        // Inicializamos los acumuladores
+
         let sumaValorEntregadoPorTCEA = 0;
         let sumaValorRecibido = 0;
 
@@ -46,11 +44,11 @@ exports.calculateTCEATotal = (req, res) => {
             console.log(`Valor recibido: ${valorRecibido}`);
             console.log(`TCEA: ${tcea}`);
 
-            // Multiplicación para la suma de valor entregado por TCEA
+
             const valorEntregadoPorTCEA = valorEntregado * (tcea / 100);
             console.log(`valorEntregado * (tcea / 100): ${valorEntregado} * ${tcea / 100} = ${valorEntregadoPorTCEA}`);
 
-            // Acumular los valores en las variables de suma
+
             sumaValorEntregadoPorTCEA += valorEntregadoPorTCEA;
             sumaValorRecibido += valorRecibido;
 
@@ -58,13 +56,13 @@ exports.calculateTCEATotal = (req, res) => {
             console.log(`Suma Valor Recibido (acumulado): ${sumaValorRecibido}`);
         });
 
-        // Evitar división por cero
+
         if (sumaValorRecibido === 0) {
             console.error('Error en el cálculo: la suma de valores recibidos es cero');
             return res.status(400).json({ error: 'Error en el cálculo: la suma de valores recibidos es cero' });
         }
 
-        // Calcular la TCEA total final
+
         const tceaTotal = (sumaValorEntregadoPorTCEA / sumaValorRecibido) * 100;
         console.log('TCEA Total calculada:', tceaTotal);
 
